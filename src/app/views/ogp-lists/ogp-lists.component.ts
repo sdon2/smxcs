@@ -8,6 +8,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { FormControl } from '@angular/forms';
 import { RoleService } from 'src/app/services/role.service';
 import { UserRole } from 'src/app/models/enums';
+import { environment } from '../../../environments/environment';
+import { PostService } from 'src/app/services/post.service';
 
 @Component({
   selector: 'app-ogp-lists',
@@ -28,6 +30,7 @@ export class OgpListsComponent implements OnInit {
   canView: boolean;
   canEdit: boolean;
   canPrint: boolean;
+  canExport: boolean;
   canDelete: boolean;
 
   manualPage: number;
@@ -36,12 +39,14 @@ export class OgpListsComponent implements OnInit {
     private dialogService: DialogService,
     private ogpListService: OGPListService,
     private roleService: RoleService,
+    private postService: PostService,
     private router: Router,
     private route: ActivatedRoute) {
       this.role = this.roleService.getRole();
       this.canAdd = this.role == UserRole.Admin || this.role == UserRole.Owner || this.role == UserRole.Accountant;
       this.canView = this.canAdd;
       this.canEdit = this.canAdd;
+      this.canExport = this.canEdit;
       this.canPrint = this.canEdit;
       this.canDelete = this.role == UserRole.Admin || this.role == UserRole.Owner;
     }
@@ -132,6 +137,14 @@ export class OgpListsComponent implements OnInit {
 
   printOGPList(id: number) {
     window.open(`${Config.ApiRoot}/pdf/ogplist/${id}`, '_blank');
+  }
+
+  exportToExcel(id) {
+    this.postService.post({ id }, this.getActionUrl('/generate-xlsx/ogplist'));
+  }
+
+  getActionUrl(url: string) {
+    return environment.apiUrl + url;
   }
 
   async searchOgpLists() {

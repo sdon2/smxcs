@@ -18,6 +18,8 @@
   "require": {
     "box/spout": "^3.1",
     "ext-json": "*",
-    "vlucas/phpdotenv": "^5.4"
+    "vlucas/phpdotenv": "^5.4",
+    "tightenco/collect": "^8.78",
+    "nesbot/carbon": "^2.55"
   }
 }

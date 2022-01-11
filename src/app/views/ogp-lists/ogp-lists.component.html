@@ -1,8 +1,8 @@
 <div class="animated bounceInUp">
   <mat-card>
-    
+
     <app-page-title [title]="'OGP Lists'"></app-page-title>
-    
+
     <div class="topContainer" fxLayout.gt-xs="row" fxLayout.xs="column">
         <mat-form-field fxFlex="25%" fxFlex.sm="50%" fxFlex.xs="100%">
           <input autocomplete="off" (keyup.enter)="searchOgpLists()" matInput type="text" placeholder="Search OGP Lists" [formControl]="searchText">
@@ -57,6 +57,9 @@
               <button *ngIf="canPrint" mat-icon-button class="action-button">
                 <mat-icon aria-label="Print" title="Print" (click)="printOGPList(item.Id)" color="accent">print</mat-icon>
               </button>
+              <button *ngIf="canExport" mat-icon-button class="action-button">
+                <mat-icon aria-label="Print" title="Print" (click)="exportToExcel(item.Id)" color="primary">table_chart</mat-icon>
+              </button>
               <button *ngIf="canDelete" mat-icon-button class="action-button">
                 <mat-icon aria-label="Delete" title="Delete" (click)="deleteOGPList(i)" color="warn">clear</mat-icon>
               </button>
@@ -80,6 +83,6 @@
     <ng-template #noOGPLists>
       <div class="alert alert-danger">No OGP Lists found</div>
     </ng-template>
-    
+
   </mat-card>
 </div>

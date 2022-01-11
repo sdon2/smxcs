@@ -9,7 +9,7 @@ class PdfGenerate
     }
 
     function generatePdf($html, $orientation = "LANDSCAPE", $pagesize = "A4", $width = "0.00", $height = "0.00") {
-        
+
         $ch = \curl_init($this->pdf_url);
         $payload = $html;
 
@@ -19,6 +19,8 @@ class PdfGenerate
         # Return response instead of printing.
         \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         \curl_setopt($ch, CURLOPT_HEADER, true);
+
+        $headers = [];
 
         # Get headers
         \curl_setopt($ch, CURLOPT_HEADERFUNCTION, function($curl, $header) use (&$headers) {
