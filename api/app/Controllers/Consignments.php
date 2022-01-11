@@ -97,7 +97,7 @@ SQL;
 
     function getUncompleted()
     {
-        $sql = "SELECT * FROM consignments WHERE ISNULL(OGP_Id) AND `Status` = ?";
+        $sql = "SELECT * FROM consignments WHERE ISNULL(OGP_Id) AND `Status` = ? AND FinancialYear=" . $_ENV['FINANCIAL_YEAR'];
         $consignments = $this->db->query($sql, [NEWCONSIGNMENT])->fetchAll() ?: [];
 
         foreach($consignments as &$consignment)
@@ -136,13 +136,17 @@ SQL;
 
         $this->preparePostData($postData);
 
-        $s_params = "ConsignmentDate,LRNumber,ConsignorId,ConsigneeId,FromCityId,ToCityId,NoOfItems,Description,ChargedWeightKgs,FreightCharge,DeliveryCharges,LoadingCharges,UnloadingCharges,Demurrage,GSTPercent,GSTAmount,InvoiceNumber,PaymentMode";
+        $s_params = "ConsignmentDate,LRNumber,ConsignorId,ConsigneeId,FromCityId,ToCityId,NoOfItems,Description,ChargedWeightKgs,FreightCharge,DeliveryCharges,LoadingCharges,UnloadingCharges,Demurrage,GSTPercent,GSTAmount,InvoiceNumber,PaymentMode,FinancialYear";
         $s_params_exploded = explode(",", $s_params);
         $q_params = implode(",", \array_fill(0, count($s_params_exploded), "?"));
         $sql = "INSERT INTO consignments ({$s_params}) VALUES({$q_params})";
         $params = [];
         foreach ($s_params_exploded as $param) {
-            \array_push($params, $postData[$param]);
+            if ($param === 'FinancialYear') {
+                \array_push($params, $_ENV['FINANCIAL_YEAR']);
+            } else {
+                \array_push($params, $postData[$param]);
+            }
         }
         $id = $this->db->insert($sql, $params);
         if (!$id) $this->throwError("Unable to add consignment");
@@ -245,7 +249,7 @@ SQL;
 
     function getNewLrId()
     {
-        $sql = "SELECT MAX(LRNumber) AS NewLR FROM consignments";
+        $sql = "SELECT MAX(LRNumber) AS NewLR FROM consignments WHERE FinancialYear=" . $_ENV['FINANCIAL_YEAR'];
         $result = $this->db->query($sql)->fetch();
         $result = ($result['NewLR'] ?: 0) + 1;
 

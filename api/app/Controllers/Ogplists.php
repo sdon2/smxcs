@@ -246,7 +246,7 @@ SQL;
     {
         $id = intval($this->jsonPost("id"));
         $cons = $this->db->query("SELECT Id FROM consignments WHERE OGP_Id = ?", [$id])->fetchAll();
-        
+
         $sql = "DELETE FROM ogplists WHERE Id = ?";
         $deleted = $this->db->delete($sql, [$id]);
 

@@ -7,7 +7,7 @@ if (!$loaded = $dotenv->safeLoad()) {
     throw new ApiException('.env file not found');
 }
 
-$dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS', 'SMS_API_USERNAME', 'SMS_API_PASSWORD', 'SMS_API_SENDER', 'SMS_API_KEY']);
+$dotenv->required(['FINANCIAL_YEAR', 'DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS', 'SMS_API_USERNAME', 'SMS_API_PASSWORD', 'SMS_API_SENDER', 'SMS_API_KEY']);
 
 $mode = in_array($_ENV['APP_ENV'] ?? '', ['local', 'development']);
 define('DEVELOPMENT', $mode);
