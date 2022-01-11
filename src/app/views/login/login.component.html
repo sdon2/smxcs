@@ -1,0 +1,22 @@
+<div id="login" class="animated fadeInDownBig">
+    <div class="login-container">
+        <div class="login-content">
+            <form (ngSubmit)="Login()" autocomplete="off" [formGroup]="userForm">
+                <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+                <h2>SMXCS Login</h2>
+                <div fxLayout="column" fxLayoutGap="2.65%">
+                    <mat-form-field fxFlex="45%">
+                        <input type="text" name="username" matInput formControlName="Username" placeholder="Username" required autofocus autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field fxFlex="45%">
+                        <input type="password" name="password" matInput formControlName="UserPassword" placeholder="Password" required autocomplete="off">
+                    </mat-form-field>
+                    <div fxFlex="10%" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
+                        <button type="submit" mat-raised-button color="primary">Login</button>
+                        <button type="reset" mat-raised-button color="warn">Reset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

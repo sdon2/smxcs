@@ -1,0 +1,170 @@
+<div class="animated bounceInUp">
+  <h1>{{ title }}</h1>
+  <form novalidate autocomplete="off" [formGroup]="oForm" (ngSubmit)="saveOGPList()">
+
+    <mat-card>
+
+      <!-- row 1 -->
+      <h2>General Details</h2>
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="2.65%" fxLayoutGap.lt-md="0">
+
+        <mat-form-field fxFlex="23%">
+          <input tabindex="-1" matInput formControlName="OGPListDate" [matDatepicker]="oDate" (focus)="oDate.open()" placeholder="OGP List Date">
+          <mat-datepicker-toggle matSuffix [for]="oDate"></mat-datepicker-toggle>
+          <mat-datepicker #oDate></mat-datepicker>
+          <mat-error *ngIf="_f('OGPListDate').invalid && _f('OGPListDate').touched">
+            <span *ngIf="!!_f('OGPListDate').errors?.['required']">Date is required</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="23%">
+          <input type="text" formControlName="FromCity" #fromCityTrigger="matAutocompleteTrigger" placeholder="From Place" matInput [matAutocomplete]="fromCity" (blur)="validateCity('FromCity')">
+          <mat-autocomplete autoActiveFirstOption #fromCity="matAutocomplete" [displayWith]="displayCityFn">
+            <mat-option *ngFor="let city of filteredFromCities | async" [value]="city">
+              {{city.CityName}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="_f('FromCity').invalid && _f('FromCity').touched">
+            <span *ngIf="!!_f('FromCity').errors?.['required']">From place is required</span>
+          </mat-error>
+          <button type="button" *ngIf="!isReadOnly" tabindex="-1" title="Add City" matSuffix mat-button mat-icon-button>
+            <mat-icon aria-label="Add City" class="addNewItemBtn" (click)="openNewCityDialog('from')">add_circle</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="23%">
+          <input type="text" formControlName="ToCity" #toCityTrigger="matAutocompleteTrigger" placeholder="To Place" matInput [matAutocomplete]="toCity" (blur)="validateCity('ToCity')">
+          <mat-autocomplete autoActiveFirstOption #toCity="matAutocomplete" [displayWith]="displayCityFn">
+            <mat-option *ngFor="let city of filteredToCities | async" [value]="city">
+              {{city.CityName}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="_f('ToCity').invalid && _f('ToCity').touched">
+            <span *ngIf="!!_f('ToCity').errors?.['required']">To place is required</span>
+          </mat-error>
+          <button type="button" *ngIf="!isReadOnly" tabindex="-1"  title="Add City" matSuffix mat-button mat-icon-button>
+            <mat-icon aria-label="Add City" class="addNewItemBtn" (click)="openNewCityDialog('to')">add_circle</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="23%">
+          <input type="text" formControlName="Vehicle" #vehicleTrigger="matAutocompleteTrigger" placeholder="Vehicle" matInput [matAutocomplete]="aVehicle" (blur)="validateVehicle('Vehicle')">
+          <mat-autocomplete autoActiveFirstOption #aVehicle="matAutocomplete" [displayWith]="displayVehicleFn">
+            <mat-option *ngFor="let vehicle of filteredVehicles | async" [value]="vehicle">
+              {{vehicle.RegNumber}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="_f('Vehicle').invalid && _f('Vehicle').touched">
+            <span *ngIf="!!_f('Vehicle').errors?.['required']">Vehicle is required</span>
+          </mat-error>
+          <button type="button" *ngIf="!isReadOnly" tabindex="-1" title="Add Vehicle" matSuffix mat-button mat-icon-button>
+            <mat-icon aria-label="Add Vehicle" class="addNewItemBtn" (click)="openNewVehicleDialog()">add_circle</mat-icon>
+          </button>
+        </mat-form-field>
+
+
+      </div>
+
+    </mat-card>
+
+    <mat-card>
+
+      <!-- row 2 -->
+      <h2>Driver Details</h2>
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="2%" fxLayoutGap.lt-md="0">
+
+        <mat-form-field fxFlex="49%">
+          <input type="text" formControlName="Driver" placeholder="Driver Name" matInput [matAutocomplete]="driverName">
+          <mat-autocomplete autoActiveFirstOption #driverName="matAutocomplete" [displayWith]="displayDriverFn">
+            <mat-option *ngFor="let driver of filteredDrivers | async" [value]="driver">
+              {{driver.DriverName}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="_f('Driver').invalid && _f('Driver').touched">
+            <span *ngIf="!!_f('Driver').errors?.['required']">Driver name is required</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="49%">
+          <input matInput placeholder="Driver Phone" formControlName="DriverPhone">
+          <mat-error *ngIf="_f('DriverPhone').invalid && _f('DriverPhone').touched">
+            <span *ngIf="!!_f('DriverPhone').errors?.['required']">Driver phone is required</span>
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+
+    </mat-card>
+
+    <mat-card>
+
+      <!-- row 1 -->
+      <h2>Consignments</h2>
+
+      <div fxLayout="row" *ngIf="!isReadOnly" style="margin-bottom: 10px;">
+        <div fxFlex="auto"></div>
+        <div fxLayoutAlign.xs="center">
+          <button type="button" mat-fab (click)="openSelectConsignmentsDialog()" title="Select Consignments"><mat-icon>add</mat-icon></button>
+        </div>
+      </div>
+
+      <table *ngIf="selectedConsignments.length > 0;else noConsignments" class="table table-hovered selected-consignments">
+        <tr>
+          <th>#</th>
+          <th>LR #</th>
+          <th>Date</th>
+          <th>Consignor</th>
+          <th>Consignee</th>
+          <th>From</th>
+          <th>To</th>
+        </tr>
+        <tr *ngFor="let item of selectedConsignments; index as i">
+          <td>{{ i + 1 }}</td>
+          <td>{{ padLRNumber(item.LRNumber) }}</td>
+          <td>{{ item.ConsignmentDate | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ item.Consignor.Name }}</td>
+          <td>{{ item.Consignee.Name }}</td>
+          <td>{{ item.FromCity.CityName }}</td>
+          <td>{{ item.ToCity.CityName }}</td>
+        </tr>
+      </table>
+
+      <ng-template #noConsignments>
+        <div class="alert alert-danger">No Consignments added</div>
+      </ng-template>
+
+    </mat-card>
+
+    <mat-card>
+
+      <!-- row 1 -->
+      <h2>Rent Details</h2>
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="0" fxLayoutGap="2.5%">
+
+        <mat-form-field fxFlex="22.5%">
+          <input tabindex="-1" matInput placeholder="Rent" formControlName="Rent">
+          <mat-error *ngIf="_f('Rent').invalid && _f('Rent').touched">
+            <span *ngIf="!!_f('Rent').errors.required">Rent is required</span>
+            <span *ngIf="!!_f('Rent').errors?.['pattern']">Invalid value</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="22.5%">
+          <input tabindex="-1" matInput placeholder="Advance" formControlName="Advance">
+          <mat-error *ngIf="_f('Advance').invalid && _f('Advance').touched">
+            <span *ngIf="!!_f('Advance').errors?.['required']">Advance is required</span>
+            <span *ngIf="!!_f('Advance').errors?.['pattern']">Invalid value</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="22.5%">
+          <input tabindex="-1" matInput placeholder="Balance" [value]="Balance" [readonly]="true && !isReadOnly" [disabled]="isReadOnly">
+        </mat-form-field>
+
+      </div>
+    </mat-card>
+
+    <button type="submit" *ngIf="!isReadOnly" [disabled]="!oForm.valid" mat-raised-button class="saveBtn" color="accent">Save</button>
+
+  </form>
+</div>

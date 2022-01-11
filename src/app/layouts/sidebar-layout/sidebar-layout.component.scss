@@ -1,0 +1,49 @@
+@import '../../../scss/variables.scss';
+@import "../../../scss/media-queries.scss";
+
+mat-toolbar {
+    button {
+        margin-right: 10px;
+    }
+}
+
+mat-nav-list {
+    min-width: 200px;
+    mat-icon {
+        margin-right: 10px;
+    }
+}
+
+mat-sidenav-container {
+    min-height: 100vh;
+}
+
+mat-sidenav-content {
+    padding: 40px;
+    padding-top: 20px;
+}
+
+.fill-remaining-space {
+    flex: 1 1 auto;
+}
+
+.is-active {
+    background: $primary !important;
+    color: #fff !important;
+}
+
+@include respond-below(sm) {
+    .fill-remaining-space {
+        display: none;
+    }
+    .userdata {
+        display: block;
+    }
+    .mat-toolbar-row {
+        flex-direction: column;
+    }
+    .mat-toolbar-multiple-rows {
+        min-height: 120px;
+        padding-top: 5px;
+    }
+}

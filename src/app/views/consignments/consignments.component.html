@@ -1,0 +1,102 @@
+<div class="animated bounceInUp">
+    <mat-card>
+
+        <app-page-title [title]="'Consignments'"></app-page-title>
+
+        <div class="topContainer" fxLayout.gt-xs="row" fxLayout.xs="column">
+
+            <mat-form-field fxFlex="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+                <input autocomplete="off" (keyup.enter)="searchConsignments()" matInput type="text" placeholder="Search Consignments" [formControl]="searchText">
+                <button mat-button *ngIf="searched" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+                    <mat-icon class="clearIcon">close</mat-icon>
+                </button>
+                <button mat-button matSuffix mat-icon-button *ngIf="!searched" aria-label="Search" (click)="searchConsignments()">
+                    <mat-icon class="searchIcon">search</mat-icon>
+                </button>
+            </mat-form-field>
+            <div fxFlex="auto"></div>
+            <div *ngIf="canAdd" fxLayoutAlign.xs="center">
+                <button mat-fab (click)="addConsignment()" title="Add Consignment"><mat-icon>add</mat-icon></button>
+            </div>
+        </div>
+
+        <div *ngIf="isLoading;else consignmentList">
+            <div class="alert alert-primary">Loading ...</div>
+        </div>
+
+        <ng-template #consignmentList>
+            <table *ngIf="consignments.length > 0;else noConsignments" class="table table-hovered">
+                <tr>
+                    <th>#</th>
+                    <th>LR #</th>
+                    <th>Date</th>
+                    <th>Consignor</th>
+                    <th>Consignee</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Items</th>
+                    <th>Mode</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+                <tr *ngFor="let item of consignments; index as i">
+                    <td>{{ (pageStats.pageIndex * pageStats.pageSize) + (i + 1) }}</td>
+                    <td>{{ paddedLRNumber(item.LRNumber) }}</td>
+                    <td>{{ item.ConsignmentDate | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ item.Consignor.Name | slice:0:12 }}</td>
+                    <td>{{ item.Consignee.Name | slice:0:12 }}</td>
+                    <td>{{ item.FromCity.CityName }}</td>
+                    <td>{{ item.ToCity.CityName }}</td>
+                    <td>{{ item.NoOfItems }}</td>
+                    <td>
+                        <mat-chip-list>
+                            <mat-chip [color]="getChipColorForPaymentModes(item.PaymentMode)" selected>{{ getPaymentMode(item.PaymentMode) }}</mat-chip>
+                        </mat-chip-list>
+                    </td>
+                    <td class="statusMenu" *ngIf="branchAndOwner">
+                        <button mat-button [color]="getChipColor(item.Status)" [matMenuTriggerFor]="statusMenu">{{ getStatus(item.Status) }}</button>
+                        <mat-menu #statusMenu="matMenu">
+                            <button *ngFor="let status of getStatusItems(item.Status)" mat-menu-item (click)="setStatus(i, status.status)"><mat-icon>{{ status.icon }}</mat-icon><span>{{ getStatus(status.status) }}</span></button>
+                        </mat-menu>
+                    </td>
+                    <td *ngIf="!branchAndOwner">
+                        <mat-chip-list>
+                            <mat-chip [color]="getChipColor(item.Status)" selected>{{ getStatus(item.Status) }}</mat-chip>
+                        </mat-chip-list>
+                    </td>
+                    <td>
+                        <button *ngIf="canView" mat-icon-button class="action-button">
+                            <mat-icon aria-label="View" title="View" (click)="viewConsignment(item.Id)" class="view-icon">visibility</mat-icon>
+                        </button>
+                        <button *ngIf="canEdit" mat-icon-button class="action-button">
+                            <mat-icon aria-label="Edit" title="Edit" (click)="editConsignment(item.Id)" class="edit-icon">edit</mat-icon>
+                        </button>
+                        <button *ngIf="canPrint"  mat-icon-button class="action-button">
+                            <mat-icon aria-label="Print" title="Print" (click)="printConsignment(item.Id)" class="print-icon">print</mat-icon>
+                        </button>
+                        <button *ngIf="canDelete"  mat-icon-button class="action-button">
+                            <mat-icon aria-label="Delete" title="Delete" (click)="deleteConsignment(i)" class="delete-icon">clear</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <div class="pagination">
+                <div class="page-select" *ngIf="consignments.length > 0">
+                    <div class="label">Go to page:</div>
+                    <mat-form-field>
+                        <mat-select [ngModel]="manualPage" (ngModelChange)="gotoPage($event)">
+                            <mat-option *ngFor="let page of pagesArray(totalPages)" [value]="page">{{ page }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex-fill"></div>
+                <mat-paginator #paginator [length]="pageStats.totalItems" [pageIndex]="pageStats.pageIndex" [pageSize]="pageStats.pageSize" (page)="getNextPage($event)"></mat-paginator>
+            </div>
+        </ng-template>
+
+        <ng-template #noConsignments>
+            <div class="alert alert-danger">No Consignments found</div>
+        </ng-template>
+
+    </mat-card>
+</div>

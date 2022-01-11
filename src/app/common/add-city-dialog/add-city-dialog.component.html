@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Add City</h1>
+<div mat-dialog-content [formGroup]="cityForm">
+    <p>Enter City Name:</p>
+    <mat-form-field>
+        <input cdkFocusInitial matInput formControlName="CityName" autocomplete="off">
+        <mat-error *ngIf="_f('CityName').invalid && _f('CityName').touched">
+            <span *ngIf="_f('CityName').errors?.['required']">City name is required</span>
+            <span *ngIf="_f('CityName').errors?.['pattern']">City name must be 3 to 50 characters</span>
+        </mat-error>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="primary" (click)="onOkClick()" cdkFocusInitial>Ok</button>
+    <button mat-button (click)="onCancelClick()">Cancel</button>
+</div>

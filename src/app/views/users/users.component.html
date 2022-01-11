@@ -1,0 +1,48 @@
+<div class="animated bounceInUp">
+  <mat-card>
+    
+    <app-page-title [title]="'Users'"></app-page-title>
+    
+    <div class="topContainer" fxLayout.gt-xs="row" fxLayout.xs="column">
+      <div fxFlex="auto"></div>
+      <div fxLayoutAlign.xs="center">
+        <button mat-fab (click)="addUser()" title="Add User"><mat-icon>add</mat-icon></button>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading;else userList">
+      <div class="alert alert-primary">Loading ...</div>
+    </div>
+
+    <ng-template #userList>
+      <table *ngIf="users.length > 0;else noUsers" class="table table-hovered">
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Username</th>
+          <th>Role</th>
+          <th width="15%"></th>
+        </tr>
+        <tr *ngFor="let item of users; index as i">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.Fullname }}</td>
+          <td>{{ item.Username }}</td>
+          <td>{{ getUserRole(item.UserRole) }}</td>
+          <td>
+            <button mat-icon-button class="action-button">
+              <mat-icon aria-label="Edit" title="Edit" (click)="editUser(i)" color="primary">edit</mat-icon>
+            </button>
+            <button mat-icon-button class="action-button">
+              <mat-icon aria-label="Delete" title="Delete" (click)="deleteUser(i)" color="warn">clear</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </ng-template>
+
+    <ng-template #noUsers>
+      <div class="alert alert-danger">No users found</div>
+    </ng-template>
+    
+  </mat-card>
+</div>

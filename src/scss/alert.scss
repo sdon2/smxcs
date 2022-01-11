@@ -1,0 +1,110 @@
+// Variables
+$theme-color-interval:      8% !default;
+$enable-gradients: false !default;
+$enable-rounded: true !default;
+
+$alert-padding-y:                   .75rem !default;
+$alert-padding-x:                   1.25rem !default;
+$alert-margin-bottom:               1rem !default;
+$alert-border-radius:               .25rem !default;
+$alert-link-font-weight:            700 !default;
+$alert-border-width:                1px !default;
+
+$alert-bg-level:                    -10 !default;
+$alert-border-level:                -9 !default;
+$alert-color-level:                 6 !default;
+
+$alert-primary:       #007bff !default;
+$alert-secondary:     #6c757d !default;
+$alert-success:       #28a745 !default;
+$alert-info:          #17a2b8 !default;
+$alert-warning:       #ffc107 !default;
+$alert-danger:        #dc3545 !default;
+$alert-light:         #f8f9fa !default;
+$alert-dark:          #343a40 !default;
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+  (
+    "primary":    $alert-primary,
+    "secondary":  $alert-secondary,
+    "success":    $alert-success,
+    "info":       $alert-info,
+    "warning":    $alert-warning,
+    "danger":     $alert-danger,
+    "light":      $alert-light,
+    "dark":       $alert-dark
+  ),
+  $theme-colors
+);
+
+// Mixins
+@mixin gradient-bg($color) {
+  @if $enable-gradients {
+    background: $color linear-gradient(180deg, mix(#fff, $color, 15%), $color) repeat-x;
+  } @else {
+    background-color: $color;
+  }
+}
+
+@mixin alert-variant($background, $border, $color) {
+  color: $color;
+  @include gradient-bg($background);
+  border-color: $border;
+
+  hr {
+    border-top-color: darken($border, 5%);
+  }
+
+  .alert-link {
+    color: darken($color, 10%);
+  }
+}
+
+@mixin border-radius($radius: $border-radius, $fallback-border-radius: false) {
+  @if $enable-rounded {
+    border-radius: $radius;
+  }
+  @else if $fallback-border-radius != false {
+    border-radius: $fallback-border-radius;
+  }
+}
+
+// Functions
+@function theme-color($key: "primary") {
+  @return map-get($theme-colors, $key);
+}
+
+@function theme-color-level($color-name: "primary", $level: 0) {
+  $color: theme-color($color-name);
+  $color-base: if($level > 0, #000, #fff);
+  $level: abs($level);
+
+  @return mix($color-base, $color, $level * $theme-color-interval);
+}
+
+// Actual css code
+.alert {
+  position: relative;
+  padding: $alert-padding-y $alert-padding-x;
+  margin-bottom: $alert-margin-bottom;
+  border: $alert-border-width solid transparent;
+  @include border-radius($alert-border-radius);
+}
+
+// Headings for larger alerts
+.alert-heading {
+  // Specified to prevent conflicts of changing $headings-color
+  color: inherit;
+}
+
+// Provide class for links that match alerts
+.alert-link {
+  font-weight: $alert-link-font-weight;
+}
+
+@each $color, $value in $theme-colors {
+  .alert-#{$color} {
+    @include alert-variant(theme-color-level($color, $alert-bg-level), theme-color-level($color, $alert-border-level), theme-color-level($color, $alert-color-level));
+  }
+}

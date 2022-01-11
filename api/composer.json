@@ -1,0 +1,23 @@
+{
+  "name": "saravana/api",
+  "type": "metapackage",
+  "description": "Minimal required set of API",
+  "license": "private",
+  "authors": [
+    {
+      "name": "Saravanakumar Arumugam",
+      "role": "Developer",
+      "homepage": "https://github.com/saravanakumar-arumugam/smxcs.git"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "": "./app"
+    }
+  },
+  "require": {
+    "box/spout": "^3.1",
+    "ext-json": "*",
+    "vlucas/phpdotenv": "^5.4"
+  }
+}

@@ -1,0 +1,23 @@
+.radio-row {
+    .radio-field {
+        mat-label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 85%;
+        color: #3949ab;
+        }
+    }
+    mat-radio-button {
+        margin-right: 15px;
+        font-size: 70%;
+    }
+}
+
+@media (max-width: 960px) {
+    .radio-field {
+        margin-bottom: 15px !important;
+    }
+    .radio-field:first-child, .radio-field:last-child {
+        margin-bottom: 5px !important;
+    }
+}

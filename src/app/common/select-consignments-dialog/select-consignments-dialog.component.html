@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Select Consignments</h1>
+<div mat-dialog-content class="table-container">
+    <div class="select-table" fxLayout="column" fxLayoutGap="0">
+        <div class="table-row heading" fxFlex="100%" fxLayout="row" fxLayoutGap="2.5%">
+            <div fxFlex="15%" class="text-center">#</div>
+            <div fxFlex="25%">LR #</div>
+            <div fxFlex="30%">From</div>
+            <div fxFlex="30%">To</div>
+        </div>
+        <div class="table-row" fxFlex="100%" fxLayout="row" fxLayoutGap="2.5%"
+            *ngFor="let item of _loadedConsignments;index as i" (click)="toggleConsignment(item)"
+            [ngStyle]="setStyle(item)">
+            <div fxFlex="15%" class="text-center">{{ i + 1 }}</div>
+            <div fxFlex="25%">{{ padLRNumber(item.LRNumber) }}</div>
+            <div fxFlex="25%">{{ item.FromCity.CityName }}</div>
+            <div fxFlex="25%">{{ item.ToCity.CityName }}</div>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="primary" (click)="onOkClick()" cdkFocusInitial>Ok</button>
+    <button mat-button (click)="onCancelClick()">Cancel</button>
+</div>

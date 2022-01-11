@@ -1,0 +1,103 @@
+@import "../../../scss/media-queries.scss";
+
+.topContainer {
+    margin: 0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+button {
+    outline: 0 !important;
+}
+
+.statusMenu {
+    padding: 0;
+}
+
+.search-box {
+    margin-right: 0 !important;
+}
+
+.consignmentStatus {
+    margin: 0 !important;
+    font-size: 12px;
+}
+
+.search-button {
+    button + button {
+        margin-left: 5px;
+    }
+}
+
+@include respond-below(md) {
+    td::before {
+        font-weight: bold;
+        text-align: left;
+        margin-right: 15px;
+    }
+
+    td:nth-of-type(1):before { content: "#"; }
+    td:nth-of-type(2):before { content: "LR #"; }
+    td:nth-of-type(3):before { content: "Date:"; }
+    td:nth-of-type(4):before { content: "Consignor:"; }
+    td:nth-of-type(5):before { content: "Consignee:"; }
+    td:nth-of-type(6):before { content: "From:"; }
+    td:nth-of-type(7):before { content: "To:"; }
+    td:nth-of-type(8):before { content: "Items:"; }
+    td:nth-of-type(9):before { content: "Mode:"; }
+    td:nth-of-type(10):before { content: "Status:"; }
+}
+
+.pagination {
+    display: flex;
+    justify-items: right;
+}
+
+.flex-fill {
+    flex-grow: 1;
+}
+
+.page-select {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+
+    .label {
+        margin: 0 4px;
+    }
+
+    mat-form-field {
+        width: 50px;
+    }
+}
+
+.advanced-search {
+    width: 100%;
+
+    .search-by-label {
+        padding-bottom: 5px;
+    }
+
+    .mat-radio-button + .mat-radio-button {
+        margin-left: 8px;
+    }
+
+    .mat-form-field + .mat-form-field {
+        margin-left: 8px;
+    }
+
+    .search-button {
+        margin-left: 10px;
+    }
+}
+
+@media (max-width: 599px) {
+    .advanced-search {
+        .mat-form-field + .mat-form-field {
+            margin-left: 0 !important;
+        }
+        .search-button {
+            margin-left: 0;
+        }
+    }
+}

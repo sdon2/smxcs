@@ -1,0 +1,77 @@
+@import '../../../scss/variables.scss';
+
+@import url('https://fonts.googleapis.com/css?family=Cabin:400,700');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:900');
+
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
+  #login {
+    position: relative;
+    height: 100vh;
+  }
+
+  #login .login-container {
+    position: absolute;
+    left: 50%;
+    top: 35%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+  .login-container {
+    max-width: 400px;
+    width: 100%;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .login-container .login-content {
+    position: relative;
+    height: 240px;
+  }
+
+  .login-container .login-content h3 {
+    font-family: 'Cabin', sans-serif;
+    position: relative;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #262626;
+    margin: 0px;
+    letter-spacing: 3px;
+    padding-left: 6px;
+  }
+
+  .login-container h2 {
+    font-family: 'Cabin', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #000;
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+
+  @media only screen and (max-width: 767px) {
+    .login-container .login-content {
+      height: 200px;
+    }
+  }
+
+  @media only screen and (max-width: 480px) {
+    .login-container .login-content {
+      height: 162px;
+    }
+    .login-container h2 {
+      font-size: 16px;
+    }
+  }

@@ -1,0 +1,122 @@
+<div class="animated bounceInUp">
+    <mat-card>
+
+        <app-page-title [title]="'Search Consignments'"></app-page-title>
+
+            <div class="topContainer">
+                <mat-card>
+                    <form novalidate [formGroup]="advancedSearchForm" (ngSubmit)="searchConsignments()" autocomplete="off" class="advanced-search">
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="2.00%" fxLayoutGap.lt-md="0">
+                            <div fxFlex="25%" fxFlex.xs="100%" class="search-box">
+                                <div class="search-by-label" mat-label>Search By</div>
+                                <mat-radio-group formControlName="customerType">
+                                    <mat-radio-button [value]="'consignor'">Consignor</mat-radio-button>
+                                    <mat-radio-button [value]="'consignee'">Consignee</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+
+                            <mat-form-field fxFlex="37%" fxFlex.xs="100%">
+                                <input type="text" formControlName="searchText" #customerTrigger="matAutocompleteTrigger" placeholder="Search By Name" matInput [matAutocomplete]="cCustomer" (blur)="validateCustomer()" autocomplete="off">
+                                <mat-autocomplete autoActiveFirstOption #cCustomer="matAutocomplete" [displayWith]="displayCustomerFn">
+                                    <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">
+                                        {{customer.Name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="advancedSearchForm.controls.searchText.hasError('required')">Consignee/Consignor is required</mat-error>
+                            </mat-form-field>
+
+                            <div fxFlex="33%" fxFlex.xs="100%">
+                                <div class="search-by-label" mat-label>Payment Mode</div>
+                                <mat-radio-group formControlName="paymentMode">
+                                    <mat-radio-button [value]="-1">Any</mat-radio-button>
+                                    <mat-radio-button [value]="1">Paid</mat-radio-button>
+                                    <mat-radio-button [value]="3">A/C Pay</mat-radio-button>
+                                    <mat-radio-button [value]="2">To Pay</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="2.65%" fxLayoutGap.lt-md="0">
+                            <mat-form-field fxFlex="33%" fxFlex.xs="100%">
+                                <mat-date-range-input [formGroup]="advancedSearchForm" [rangePicker]="picker">
+                                    <input matStartDate formControlName="startDate" placeholder="Start date">
+                                    <input matEndDate formControlName="endDate" placeholder="End date">
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+                                <mat-error *ngIf="advancedSearchForm.controls.startDate.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+                                <mat-error *ngIf="advancedSearchForm.controls.endDate.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+                            </mat-form-field>
+
+                            <div class="search-button" fxFlex="10%" fxFlex.xs="100%">
+                                <button type="submit" mat-mini-fab color="primary" aria-label="Search" [disabled]="advancedSearchForm.invalid" title="Search">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+                                <button type="button" (click)="exportToExcel()" mat-mini-fab color="accent" aria-label="Export to Excel" title="Export to Excel" *ngIf="searched && consignments.length > 0">
+                                    <mat-icon>input</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </mat-card>
+            </div>
+        <div *ngIf="isLoading;else consignmentList">
+            <div class="alert alert-primary">Loading ...</div>
+        </div>
+
+        <ng-template #consignmentList>
+            <table *ngIf="consignments.length > 0;else noConsignments" class="table table-hovered">
+                <tr>
+                    <th>#</th>
+                    <th>LR #</th>
+                    <th>Date</th>
+                    <th>Consignor</th>
+                    <th>Consignee</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Items</th>
+                    <th>Mode</th>
+                    <th>Status</th>
+                </tr>
+                <tr *ngFor="let item of consignments; index as i">
+                    <td>{{ ((pageStats.pageIndex - 1) * pageStats.pageSize) + (i + 1) }}</td>
+                    <td>{{ paddedLRNumber(item.LRNumber) }}</td>
+                    <td>{{ item.ConsignmentDate | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ item.Consignor.Name | slice:0:12 }}</td>
+                    <td>{{ item.Consignee.Name | slice:0:12 }}</td>
+                    <td>{{ item.FromCity.CityName }}</td>
+                    <td>{{ item.ToCity.CityName }}</td>
+                    <td>{{ item.NoOfItems }}</td>
+                    <td>
+                        <mat-chip-list>
+                            <mat-chip [color]="getChipColorForPaymentModes(item.PaymentMode)" selected>{{ getPaymentMode(item.PaymentMode) }}</mat-chip>
+                        </mat-chip-list>
+                    </td>
+                    <td>
+                        <mat-chip-list>
+                            <mat-chip [color]="getChipColor(item.Status)" selected>{{ getStatus(item.Status) }}</mat-chip>
+                        </mat-chip-list>
+                    </td>
+                </tr>
+            </table>
+            <div class="pagination" *ngIf="consignments.length > 0">
+                <div class="page-select">
+                    <div class="label">Go to page:</div>
+                    <mat-form-field>
+                        <mat-select [ngModel]="pageStats.pageIndex" (ngModelChange)="gotoPage($event)">
+                            <mat-option *ngFor="let page of pagesArray(totalPages)" [value]="page">{{ page }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex-fill"></div>
+                <mat-paginator #paginator [length]="pageStats.totalItems" [pageIndex]="pageStats.pageIndex - 1" [pageSize]="pageStats.pageSize" (page)="getNextPage($event)"></mat-paginator>
+            </div>
+        </ng-template>
+
+        <ng-template #noConsignments>
+            <div class="alert alert-danger" *ngIf="searched">No Consignments found</div>
+            <div class="alert alert-info" *ngIf="!searched">Search consignments</div>
+        </ng-template>
+
+    </mat-card>
+</div>

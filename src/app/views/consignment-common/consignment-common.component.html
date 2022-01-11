@@ -1,0 +1,211 @@
+<div class="animated bounceInUp">
+    <h1>{{ title }}</h1>
+    <form novalidate autocomplete="off" [formGroup]="cForm" (ngSubmit)="saveConsignment()">
+
+        <mat-card>
+
+            <!-- row 1 -->
+            <h2>General Details</h2>
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="2.65%" fxLayoutGap.lt-md="0">
+                <mat-form-field fxFlex="23%">
+                    <input tabindex="-1" matInput placeholder="LR Number" [value]="LRNumber" [readonly]="true && !isReadOnly" [disabled]="isReadOnly">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="23%">
+                    <input tabindex="-1" matInput formControlName="ConsignmentDate" [matDatepicker]="cDate" (focus)="cDate.open()" placeholder="Consignment Date">
+                    <mat-datepicker-toggle matSuffix [for]="cDate"></mat-datepicker-toggle>
+                    <mat-datepicker #cDate></mat-datepicker>
+                    <mat-error *ngIf="_f('ConsignmentDate').invalid && _f('ConsignmentDate').touched">
+                        <span *ngIf="!!_f('ConsignmentDate').errors?.['required']">Consignment date is required</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="23%">
+                    <input type="text" formControlName="FromCity" #fromCityTrigger="matAutocompleteTrigger" placeholder="From Place" matInput [matAutocomplete]="fromCity" (blur)="validateCity('FromCity')">
+                    <mat-autocomplete autoActiveFirstOption #fromCity="matAutocomplete" [displayWith]="displayCityFn">
+                        <mat-option *ngFor="let city of filteredFromCities | async" [value]="city">
+                            {{city.CityName}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="_f('FromCity').invalid && _f('FromCity').touched">
+                        <span *ngIf="!!_f('FromCity').errors?.['required']">From place is required</span>
+                    </mat-error>
+                    <button *ngIf="!isReadOnly" type="button" tabindex="-1" fxFlex="5%" title="Add City" matSuffix mat-button mat-icon-button>
+                        <mat-icon aria-label="Add City" class="addCityBtn" (click)="openNewCityDialog('from')">add_circle</mat-icon>
+                    </button>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="23%">
+                    <input type="text" formControlName="ToCity" #toCityTrigger="matAutocompleteTrigger" placeholder="To Place" matInput [matAutocomplete]="toCity" (blur)="validateCity('ToCity')">
+                    <mat-autocomplete autoActiveFirstOption #toCity="matAutocomplete" [displayWith]="displayCityFn">
+                        <mat-option *ngFor="let city of filteredToCities | async" [value]="city">
+                            {{city.CityName}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="_f('ToCity').invalid && _f('ToCity').touched">
+                        <span *ngIf="!!_f('ToCity').errors?.['required']">To place is required</span>
+                    </mat-error>
+                    <button *ngIf="!isReadOnly" type="button" tabindex="-1" fxFlex="5%" title="Add City" matSuffix mat-button mat-icon-button>
+                        <mat-icon aria-label="Add City" class="addCityBtn" (click)="openNewCityDialog('to')">add_circle</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+
+            <!-- row 2 -->
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0">
+                <mat-form-field fxFlex="48.5%">
+                    <input type="text" formControlName="Consignor" #consignorTrigger="matAutocompleteTrigger" placeholder="Consignor" matInput [matAutocomplete]="cConsignor" (blur)="validateCustomer('Consignor')" autocomplete="off">
+                    <mat-autocomplete autoActiveFirstOption #cConsignor="matAutocomplete" [displayWith]="displayCustomerFn" (optionSelected)="setPricingHelpers($event.option.value)">
+                        <mat-option *ngFor="let consignor of filteredConsignors | async" [value]="consignor">
+                            {{consignor.Name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="_f('Consignor').invalid && _f('Consignor').touched">
+                        <span *ngIf="!!_f('Consignor').errors?.['required']">Consignor is required</span>
+                    </mat-error>
+                    <button *ngIf="!isReadOnly" type="button" tabindex="-1" fxFlex="5%" title="Add Consignor" matSuffix mat-button mat-icon-button>
+                        <mat-icon aria-label="Add Consignor" class="addCustomerBtn" (click)="openNewConsignorDialog()">add_circle</mat-icon>
+                    </button>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="48.5%">
+                    <input type="text" formControlName="Consignee" #consigneeTrigger="matAutocompleteTrigger" placeholder="Consignee" matInput [matAutocomplete]="cConsignee" (blur)="validateCustomer('Consignee')" autocomplete="off">
+                    <mat-autocomplete autoActiveFirstOption #cConsignee="matAutocomplete" [displayWith]="displayCustomerFn" (optionSelected)="setPricingHelpers($event.option.value)">
+                        <mat-option *ngFor="let consignee of filteredConsignees | async" [value]="consignee">
+                            {{consignee.Name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="_f('Consignee').invalid && _f('Consignee').touched">
+                        <span *ngIf="!!_f('Consignee').errors?.['required']">Consignee is required</span>
+                    </mat-error>
+                    <button *ngIf="!isReadOnly" type="button" tabindex="-1" fxFlex="5%" title="Add Consignee" matSuffix mat-button mat-icon-button>
+                        <mat-icon aria-label="Add Consignee" class="addCustomerBtn" (click)="openNewConsigneeDialog()">add_circle</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+
+        </mat-card>
+
+        <mat-card>
+
+            <!-- row 1 -->
+            <h2>Consignment Details</h2>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0">
+
+                <mat-form-field fxFlex="18%">
+                    <input matInput placeholder="No of Articles" formControlName="NoOfItems">
+                    <mat-error *ngIf="_f('NoOfItems').invalid && _f('NoOfItems').touched">
+                        <span *ngIf="!!_f('NoOfItems').errors?.['required']">No of articles is required</span>
+                        <span *ngIf="!!_f('NoOfItems').errors?.['pattern']">Invalid value</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="36%">
+                    <input matInput placeholder="Description" formControlName="Description">
+                    <mat-error *ngIf="_f('Description').invalid && _f('Description').touched">
+                        <span *ngIf="!!_f('Description').errors?.['required']">Description is required</span>
+                        <span *ngIf="!!_f('Description').errors?.['pattern']">Description must be 3 to 100 chars</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="18%">
+                    <input matInput placeholder="Charged Weight in Kgs." formControlName="ChargedWeightKgs">
+                    <mat-error *ngIf="_f('ChargedWeightKgs').invalid && _f('ChargedWeightKgs').touched">
+                        <span *ngIf="!!_f('ChargedWeightKgs').errors?.['required']">Charged weight is required</span>
+                        <span *ngIf="!!_f('ChargedWeightKgs').errors?.['pattern']">Invalid value</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="18%">
+                    <input matInput placeholder="Freight Charge" formControlName="FreightCharge">
+                    <mat-error *ngIf="_f('FreightCharge').invalid && _f('FreightCharge').touched">
+                        <span *ngIf="!!_f('FreightCharge').errors?.['required']">Freight charge is required</span>
+                        <span *ngIf="!!_f('FreightCharge').errors?.['isZero']">Value must be more than zero</span>
+                        <span *ngIf="!!_f('FreightCharge').errors?.['pattern']">Invalid value</span>
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+
+        </mat-card>
+
+        <mat-card>
+
+            <!-- row 1 -->
+            <h2>Other Details</h2>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="2.5%" fxLayoutGap.lt-md="0">
+
+                <mat-form-field fxFlex="22.5%">
+                    <input tabindex="-1" matInput placeholder="Delivery Charges" formControlName="DeliveryCharges">
+                    <mat-error *ngIf="_f('DeliveryCharges').invalid && _f('DeliveryCharges').touched">
+                        <span *ngIf="!!_f('DeliveryCharges').errors?.['required']">Delivery charges is required</span>
+                        <span *ngIf="!!_f('DeliveryCharges').errors?.['pattern']">Invalid value</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="22.5%">
+                    <input tabindex="-1" matInput placeholder="Loading Charges" formControlName="LoadingCharges">
+                    <mat-error *ngIf="_f('LoadingCharges').invalid && _f('LoadingCharges').touched">
+                        <span *ngIf="!!_f('LoadingCharges').errors?.['required']">Loading charges is required</span>
+                        <span *ngIf="!!_f('LoadingCharges').errors?.['pattern']">Invalid value</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="22.5%">
+                    <input tabindex="-1" matInput placeholder="Unloading Charges" formControlName="UnloadingCharges">
+                    <mat-error *ngIf="_f('UnloadingCharges').invalid && _f('UnloadingCharges').touched">
+                        <span *ngIf="!!_f('UnloadingCharges').errors?.['required']">Unloading charge is required</span>
+                        <span *ngIf="!!_f('UnloadingCharges').errors?.['pattern']">Invalid value</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="22.5%">
+                    <input tabindex="-1" matInput placeholder="GST (%)" formControlName="GSTPercent">
+                    <mat-error *ngIf="_f('GSTPercent').invalid && _f('GSTPercent').touched">
+                        <span *ngIf="!!_f('GSTPercent').errors?.['required']">GST percent is required</span>
+                        <span *ngIf="!!_f('GSTPercent').errors?.['pattern']">Invalid value</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="22.5%">
+                    <input tabindex="-1" matInput placeholder="GST (Amount)" formControlName="GSTAmount" readonly>
+                    <mat-error *ngIf="_f('GSTAmount').invalid && _f('GSTAmount').touched">
+                        <span *ngIf="!!_f('GSTAmount').errors?.['required']">GST amount is required</span>
+                        <span *ngIf="!!_f('GSTAmount').errors?.['pattern']">Invalid value</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </mat-card>
+
+        <mat-card>
+            <!-- row 1 -->
+            <h2>Payment Terms</h2>
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="2.5%" fxLayoutGap.lt-md="0">
+
+                <div fxFlex="25%">
+                    <!--<div class="paymentModeLabel" mat-label>Payment Mode</div>-->
+                    <mat-radio-group formControlName="PaymentMode">
+                        <mat-radio-button [value]="1">Paid</mat-radio-button>
+                        <mat-radio-button [value]="2">To Pay</mat-radio-button>
+                        <mat-radio-button [value]="3">A/C</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <mat-form-field class="invoiceNumberInput" fxFlex="22.5%">
+                    <input tabindex="-1" matInput placeholder="Invoice Number" formControlName="InvoiceNumber">
+                </mat-form-field>
+
+                <div fxFlex="50%">
+                    <h1 class="consignmentTotal">TOTAL: ₹ {{ Total | number:'1.2' }}</h1>
+                </div>
+
+            </div>
+
+        </mat-card>
+
+        <button *ngIf="!isReadOnly" type="submit" mat-raised-button class="saveBtn" color="accent">Save</button>
+
+    </form>
+</div>

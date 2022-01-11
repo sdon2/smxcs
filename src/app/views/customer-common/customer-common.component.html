@@ -1,0 +1,112 @@
+<div class="animated bounceInUp">
+  <h1>{{ title }}</h1>
+  <form novalidate autocomplete="off" [formGroup]="cForm" (ngSubmit)="saveCustomer()">
+
+    <mat-card>
+
+      <!-- row 1 -->
+      <h2>{{ customerType }} Details</h2>
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0">
+        <mat-form-field fxFlex="31%">
+          <input matInput placeholder="{{ customerType }} Name" formControlName="Name">
+          <mat-error *ngIf="_f('Name').invalid && _f('Name').touched">
+            <span *ngIf="!!_f('Name').errors?.['required']">Name is required</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="31%">
+          <input matInput placeholder="Address" formControlName="Address">
+          <mat-error *ngIf="_f('Address').invalid && _f('Address').touched">
+            <span *ngIf="!!_f('Address').errors?.['required']">Address is required</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="31%">
+          <input matInput placeholder="Address Line 1" formControlName="Address1">
+        </mat-form-field>
+      </div>
+
+      <!-- row 2 -->
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0">
+        <mat-form-field fxFlex="31%">
+          <input matInput placeholder="City" formControlName="City">
+          <mat-error *ngIf="_f('City').invalid && _f('City').touched">
+            <span *ngIf="!!_f('City').errors?.['required']">City is required</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="31%">
+          <input matInput placeholder="State" formControlName="State">
+          <mat-error *ngIf="_f('State').invalid && _f('State').touched">
+            <span *ngIf="!!_f('State').errors?.['required']">State is required</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="31%">
+          <input matInput placeholder="Pincode" formControlName="Pincode">
+          <mat-error *ngIf="_f('Pincode').invalid && _f('Pincode').touched">
+            <span *ngIf="!!_f('Pincode').errors?.['required']">Pincode is required</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- row 3 -->
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0">
+        <mat-form-field fxFlex="31%">
+          <input matInput placeholder="Mobile" formControlName="Mobile">
+          <mat-error *ngIf="_f('Mobile').invalid && _f('Mobile').touched">
+            <span *ngIf="!!_f('Mobile').errors?.['required']">Mobile Number is required</span>
+            <span *ngIf="!!_f('Mobile').errors?.['pattern']">Mobile must be 10 numbers</span>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%">
+          <input matInput placeholder="GST Number" formControlName="GSTNo">
+          <mat-error *ngIf="_f('GSTNo').invalid && _f('GSTNo').touched">
+            <span *ngIf="!!_f('GSTNo').errors?.['required']">GST Number is required</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- row 4 -->
+      <div fxLayout="row" class="radio-row" fxLayout.lt-md="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0">
+        <mat-form-field fxFlex="31%" class="radio-field">
+          <input matInput placeholder="Freight Charge" formControlName="FreightCharge">
+          <mat-error *ngIf="_f('FreightCharge').invalid && _f('FreightCharge').touched">
+            <span *ngIf="!!_f('FreightCharge').errors?.['required']">Freight charge is required</span>
+            <span *ngIf="!!_f('FreightCharge').errors?.['pattern']">Invalid value</span>
+          </mat-error>
+        </mat-form-field>
+        <div fxFlex="31%" class="radio-field">
+          <mat-label>Based On</mat-label>
+          <mat-radio-group formControlName="BasedOn">
+            <mat-radio-button [value]="'article'">Article</mat-radio-button>
+            <mat-radio-button [value]="'weight'">Weight (Per Kg)</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div fxFlex="31%" class="radio-field">
+          <mat-label>Payment Terms</mat-label>
+          <mat-radio-group formControlName="PaymentTerms">
+            <mat-radio-button [value]="1">Cash</mat-radio-button>
+            <mat-radio-button [value]="2">To Pay</mat-radio-button>
+            <mat-radio-button [value]="3">A/C Pay</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+
+      <!-- row 5 -->
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0" fxLayoutGap.lt-md="0">
+        <mat-form-field fxFlex="100%">
+          <textarea matInput placeholder="Remarks" rows="4" formControlName="Remarks"></textarea>
+          <mat-error *ngIf="_f('Remarks').invalid && _f('Remarks').touched">
+            <span *ngIf="!!_f('Remarks').errors?.['required']">Remarks is required</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+    </mat-card>
+
+    <button type="submit" mat-raised-button class="saveBtn" color="accent">Save</button>
+
+  </form>
+</div>

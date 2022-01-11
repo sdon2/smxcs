@@ -1,0 +1,66 @@
+<div class="animated bounceInUp">
+  <mat-card>
+    
+    <app-page-title [title]="customerType + 's'"></app-page-title>
+    
+    <div class="topContainer" fxLayout.gt-xs="row" fxLayout.xs="column">
+      <mat-form-field fxFlex="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+        <input autocomplete="off" (keyup.enter)="searchCustomers()" matInput type="text" placeholder="Search {{ customerType }}s" [formControl]="searchText">
+        <button mat-button *ngIf="searched" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+          <mat-icon class="clearIcon">close</mat-icon>
+        </button>
+        <button mat-button matSuffix mat-icon-button *ngIf="!searched" aria-label="Search" (click)="searchCustomers()">
+          <mat-icon class="searchIcon">search</mat-icon>
+        </button>
+      </mat-form-field>
+      <div fxFlex="auto"></div>
+      <div fxLayoutAlign.xs="center">
+        <button mat-fab (click)="addCustomer()" title="Add Customer"><mat-icon>add</mat-icon></button>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading;else customerList">
+      <div class="alert alert-primary">Loading ...</div>
+    </div>
+
+    <ng-template #customerList>
+      <table *ngIf="customers.length > 0;else noCustomers" class="table table-hovered">
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Address1</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Pincode</th>
+          <th>Mobile</th>
+          <th width="15%" *ngIf="canEdit || canDelete"></th>
+        </tr>
+        <tr *ngFor="let item of customers; index as i">
+          <td>{{ (pageStats.pageIndex * pageStats.pageSize) + (i + 1) }}</td>
+          <td>{{ item.Name  | slice:0:20 }}</td>
+          <td>{{ item.Address || 'N/A' | slice:0:12 }}</td>
+          <td>{{ item.Address1 || 'N/A' | slice:0:12 }}</td>
+          <td>{{ item.City || 'N/A' }}</td>
+          <td>{{ item.State || 'N/A' }}</td>
+          <td>{{ item.Pincode || 'N/A' }}</td>
+          <td>{{ item.Mobile || 'N/A' }}</td>
+          <td *ngIf="canEdit || canDelete">
+            <button *ngIf="canEdit" mat-icon-button class="action-button">
+              <mat-icon aria-label="Edit" title="Edit" (click)="editCustomer(item.Id)" color="primary">edit</mat-icon>
+            </button>
+            <button *ngIf="canDelete" mat-icon-button class="action-button">
+              <mat-icon aria-label="Delete" title="Delete" (click)="deleteCustomer(i)" color="warn">clear</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
+      <mat-paginator #paginator [length]="pageStats.totalItems" [pageIndex]="pageStats.pageIndex" [pageSize]="pageStats.pageSize" (page)="getNextPage($event)"></mat-paginator>
+    </ng-template>
+
+    <ng-template #noCustomers>
+      <div class="alert alert-danger">No {{customerType}}s found</div>
+    </ng-template>
+    
+  </mat-card>
+</div>

@@ -1,0 +1,20 @@
+@import './media-queries.scss';
+
+@include respond-below(md) {
+  .table {
+      th {
+          display: none;
+      }
+      td {
+          display: block;
+      }
+
+      .mat-chip-list-wrapper {
+          display: inline !important;
+
+          .mat-standard-chip {
+              margin: 0 !important;
+          }
+      }
+  }
+}

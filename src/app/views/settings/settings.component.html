@@ -1,0 +1,69 @@
+<div class="animated bounceInUp">
+  <h1>{{ title }}</h1>
+  <form novalidate autocomplete="off" [formGroup]="LRPrintSettings" (ngSubmit)="saveSettings()">
+
+    <mat-card>
+
+      <!-- row 1 -->
+      <h2>LR Print Details</h2>
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0">
+        <mat-form-field fxFlex="23%">
+          <input matInput placeholder="Height" formControlName="Height">
+          <mat-error *ngIf="_f('Height').invalid && _f('Height').touched">
+            <span *ngIf="!!_f('Height').errors?.['required']">Height is required</span>
+            <span *ngIf="!!_f('Height').errors?.['pattern']">Invalid Height</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="23%">
+          <input matInput placeholder="Width" formControlName="Width">
+          <mat-error *ngIf="_f('Width').invalid && _f('Width').touched">
+            <span *ngIf="!!_f('Width').errors?.['required']">Width is required</span>
+            <span *ngIf="!!_f('Width').errors?.['pattern']">Invalid Width</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="23%">
+          <input matInput placeholder="Left Margin" formControlName="LeftMargin">
+          <mat-error *ngIf="_f('LeftMargin').invalid && _f('LeftMargin').touched">
+            <span *ngIf="!!_f('LeftMargin').errors?.['required']">Left Margin is required</span>
+            <span *ngIf="!!_f('LeftMargin').errors?.['pattern']">Invalid Left Margin</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="23%">
+          <input matInput placeholder="Right Margin" formControlName="RightMargin">
+          <mat-error *ngIf="_f('RightMargin').invalid && _f('RightMargin').touched">
+            <span *ngIf="!!_f('RightMargin').errors?.['required']">Right Margin is required</span>
+            <span *ngIf="!!_f('RightMargin').errors?.['pattern']">Invalid Right Margin</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- row 2 -->
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0">
+        <mat-form-field fxFlex="23%">
+          <input matInput placeholder="Top Margin" formControlName="TopMargin">
+          <mat-error *ngIf="_f('TopMargin').invalid && _f('TopMargin').touched">
+            <span *ngIf="!!_f('TopMargin').errors?.['required']">Top Margin is required</span>
+            <span *ngIf="!!_f('TopMargin').errors?.['pattern']">Invalid Top Margin</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="23%">
+          <input matInput placeholder="Bottom Margin" formControlName="BottomMargin">
+          <mat-error *ngIf="_f('BottomMargin').invalid && _f('BottomMargin').touched">
+            <span *ngIf="!!_f('BottomMargin').errors?.['required']">Bottom Margin is required</span>
+            <span *ngIf="!!_f('BottomMargin').errors?.['pattern']">Invalid Bottom Margin</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+    </mat-card>
+
+    <button type="submit" mat-raised-button class="saveBtn" color="accent">Save</button>
+
+  </form>
+</div>

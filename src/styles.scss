@@ -1,1 +1,76 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+@import "./scss/variables.scss";
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$smxcs-theme: mat.define-light-theme((
+  color: (
+    primary: $smxcs-primary,
+    accent: $smxcs-accent,
+    warn: $smxcs-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($smxcs-theme);
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@import "./scss/alert.scss";
+@import "./scss/responsive.scss";
+
+[hidden] { display: none !important; }
+[v-cloak] {
+  display: none;
+}
+
+.alert {
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.action-button {
+  line-height: 0 !important;
+  width: 30px !important;
+  height: 20px !important;
+
+}
+
+.align-center {
+  text-align: center;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  &.table-hovered {
+    tr:hover {
+      background-color: #eeeeee;
+
+      &:nth-child(1) {
+        background: none;
+      }
+    }
+  }
+
+  th, td {
+    text-align: left;
+    padding: 0.75rem 0.50rem;
+    border-top: 1px solid #cccccc;
+    vertical-align: middle;
+  }
+
+  th {
+    padding: 1rem 0.50rem;
+  }
+}
+
+.mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label:not(.mat-empty):not(.mat-form-field-empty) {
+  color: $primary;
+  font-size: 120%;
+}

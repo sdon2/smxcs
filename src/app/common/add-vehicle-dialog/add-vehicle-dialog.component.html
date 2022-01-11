@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Add Vehicle</h1>
+<div mat-dialog-content [formGroup]="vehicleForm">
+    <p>Enter Vehicle Number:</p>
+    <mat-form-field>
+        <input cdkFocusInitial matInput formControlName="RegNumber" autocomplete="off">
+        <mat-error *ngIf="_f('RegNumber').invalid && _f('RegNumber').touched">
+            <span *ngIf="_f('RegNumber').errors?.['required']">Vehicle number is required</span>
+            <span *ngIf="_f('RegNumber').errors?.['pattern']">Vehicle number must be 4 to 20 characters</span>
+        </mat-error>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="primary" (click)="onOkClick()" cdkFocusInitial>Ok</button>
+    <button mat-button (click)="onCancelClick()">Cancel</button>
+</div>

@@ -1,0 +1,85 @@
+<div class="animated bounceInUp">
+  <mat-card>
+    
+    <app-page-title [title]="'OGP Lists'"></app-page-title>
+    
+    <div class="topContainer" fxLayout.gt-xs="row" fxLayout.xs="column">
+        <mat-form-field fxFlex="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+          <input autocomplete="off" (keyup.enter)="searchOgpLists()" matInput type="text" placeholder="Search OGP Lists" [formControl]="searchText">
+          <button mat-button *ngIf="searched" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+            <mat-icon class="clearIcon">close</mat-icon>
+          </button>
+          <button mat-button matSuffix mat-icon-button *ngIf="!searched" aria-label="Search" (click)="searchOgpLists()">
+            <mat-icon class="searchIcon">search</mat-icon>
+          </button>
+        </mat-form-field>
+      <div fxFlex="auto"></div>
+      <div fxLayoutAlign.xs="center" *ngIf="canAdd">
+        <button mat-fab (click)="addOGPList()" title="Add OGP List"><mat-icon>add</mat-icon></button>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading;else ogpList">
+      <div class="alert alert-primary">Loading ...</div>
+    </div>
+
+    <ng-template #ogpList>
+      <table *ngIf="ogpLists.length > 0;else noOGPLists" class="table table-hovered">
+        <tr>
+          <th>#</th>
+            <th>Date</th>
+            <th>Vehicle</th>
+            <th>Driver</th>
+            <th>Driver Phone</th>
+            <th>LR #</th>
+            <th>Items #</th>
+            <th>From</th>
+            <th>To</th>
+            <th></th>
+        </tr>
+        <tr *ngFor="let item of ogpLists; index as i">
+          <td>{{ (pageStats.pageIndex * pageStats.pageSize) + (i + 1) }}</td>
+          <td>{{ item.OGPListDate | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ item.Vehicle.RegNumber }}</td>
+          <td>{{ item.Driver.DriverName }}</td>
+          <td>{{ item.Driver.DriverPhone }}</td>
+          <td>{{ item.NoOfConsignments }}</td>
+          <td>{{ item.NoOfItems }}</td>
+          <td>{{ item.FromCity.CityName }}</td>
+          <td>{{ item.ToCity.CityName }}</td>
+          <td>
+              <button *ngIf="canView" mat-icon-button class="action-button">
+                <mat-icon aria-label="View" title="View" (click)="viewOGPList(item.Id)" class="view-icon">visibility</mat-icon>
+              </button>
+              <button *ngIf="canEdit" mat-icon-button class="action-button">
+                <mat-icon aria-label="Edit" title="Edit" (click)="editOGPList(item.Id)" color="primary">edit</mat-icon>
+              </button>
+              <button *ngIf="canPrint" mat-icon-button class="action-button">
+                <mat-icon aria-label="Print" title="Print" (click)="printOGPList(item.Id)" color="accent">print</mat-icon>
+              </button>
+              <button *ngIf="canDelete" mat-icon-button class="action-button">
+                <mat-icon aria-label="Delete" title="Delete" (click)="deleteOGPList(i)" color="warn">clear</mat-icon>
+              </button>
+            </td>
+        </tr>
+      </table>
+      <div class="pagination">
+        <div class="page-select" *ngIf="ogpLists.length > 0">
+          <div class="label">Go to page:</div>
+          <mat-form-field>
+            <mat-select [ngModel]="manualPage" (ngModelChange)="gotoPage($event)">
+              <mat-option *ngFor="let page of pagesArray(totalPages)" [value]="page">{{ page }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex-fill"></div>
+        <mat-paginator #paginator [length]="pageStats.totalItems" [pageIndex]="pageStats.pageIndex" [pageSize]="pageStats.pageSize" (page)="getNextPage($event)"></mat-paginator>
+      </div>
+    </ng-template>
+
+    <ng-template #noOGPLists>
+      <div class="alert alert-danger">No OGP Lists found</div>
+    </ng-template>
+    
+  </mat-card>
+</div>

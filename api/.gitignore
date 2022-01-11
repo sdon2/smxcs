@@ -1,0 +1,4 @@
+/vendor
+.env
+!/logs/.gitkeep
+/logs

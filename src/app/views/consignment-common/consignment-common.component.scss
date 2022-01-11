@@ -1,0 +1,68 @@
+@import '../../../scss/variables.scss';
+@import "../../../scss/media-queries.scss";
+
+mat-datepicker-toggle {
+  display: none;
+}
+
+mat-card {
+  margin-bottom: 20px;
+}
+
+mat-radio-button {
+  margin-right: 8px;
+}
+
+input:disabled {
+  color: #222;
+}
+
+.paymentModeLabel {
+  color: $primary;
+  font-size: small;
+  margin-top: -5px;
+  padding-bottom: 2px;
+}
+
+mat-option:hover {
+  background: $primary !important;
+  color: #fff;
+}
+
+mat-option.mat-active {
+  background: $primary !important;
+  color: #fff;
+}
+
+.consignmentTotal {
+  font-size: 250%;
+  font-weight: 900;
+  margin-top: -30px;
+}
+
+.paymentTermsInput {
+  margin-top: -20px;
+}
+
+.addCityBtn {
+  color: green;
+}
+
+.addCustomerBtn {
+  color: green;
+}
+
+.saveBtn {
+  min-width: 200px;
+  min-height: 50px;
+  text-align: center;
+}
+
+@include respond-below(md) {
+  .paymentTermsInput {
+    margin-top: 0;
+  }
+  .consignmentTotal {
+    margin-top: 0;
+  }
+}

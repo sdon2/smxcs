@@ -1,0 +1,31 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="dc.first.toggle()">
+            <mat-icon aria-label="side nav toggle icon">menu</mat-icon>
+        </button>
+        <span>Sri Meenakshi Xpress Cargo Service</span>
+        <span class="fill-remaining-space"></span>
+        <span class="userdata">Hi! {{ user }}</span>
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container>
+    <mat-sidenav #drawer mode="side" [opened]="!media.isActive('xs')">
+        <mat-nav-list>
+            <a *ngFor="let menu of FilteredMenus" mat-list-item routerLink="{{ menu.link }}"
+               [routerLinkActive]="['is-active']" title="{{ menu.title }}">
+                <mat-icon aria-label="side nav toggle icon">{{ menu.icon }}</mat-icon>
+                <span *ngIf="!menu.badge">{{ menu.title }}</span>
+                <span *ngIf="menu.badge" matBadge="{{ menu.badge }}" matBadgeColor="warn" matBadgeOverlap="false">
+                    {{ menu.title }}
+                </span>
+            </a>
+            <a mat-list-item (click)="logout()" title="Logout">
+                <mat-icon aria-label="side nav toggle icon">power_settings_new</mat-icon>
+                <span>Logout</span>
+            </a>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

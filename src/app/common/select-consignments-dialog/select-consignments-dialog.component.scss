@@ -1,0 +1,31 @@
+.table-container {
+    height: 300px;
+    overflow: scroll;
+    font-size: 90%;
+}
+
+$table-border-color: #888;
+
+.select-table {
+    border: 1px solid $table-border-color;
+}
+
+.table-row {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $table-border-color;
+}
+
+.table-row div:first-child {
+    padding-left: 10px;
+}
+
+.table-row:nth-child(even) {
+    background: #aaa;
+}
+
+.table-row.heading {
+    font-weight: bolder;
+    border-top: 1px solid $table-border-color;
+    background: lighten($table-border-color, 20%);
+}

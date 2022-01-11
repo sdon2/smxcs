@@ -1,0 +1,44 @@
+@import "../../../scss/media-queries.scss";
+
+.topContainer {
+  margin: 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.searchIcon {
+  font-size: 1.35rem !important;
+  color: green;
+}
+
+button {
+  outline: 0 !important;
+}
+
+.statusMenu {
+  padding: 0.25rem 0;
+}
+
+.consignmentStatus {
+  margin: 0 !important;
+  font-size: 12px;
+}
+
+.clearIcon {
+  font-size: 1.35rem !important;
+  color: red;
+}
+
+@include respond-below(md) {
+  td::before {
+    font-weight: bold;
+    text-align: left;
+    margin-right: 15px;
+  }
+
+  td:nth-of-type(1):before { content: "#"; }
+	td:nth-of-type(2):before { content: "Log Date:"; }
+	td:nth-of-type(3):before { content: "LR #:"; }
+	td:nth-of-type(4):before { content: "User:"; }
+	td:nth-of-type(5):before { content: "Message:"; }
+}

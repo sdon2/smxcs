@@ -1,0 +1,69 @@
+<div class="animated bounceInUp">
+  <h1>{{ title }}</h1>
+  <form novalidate autocomplete="off" [formGroup]="userForm" (ngSubmit)="saveUser()">
+
+    <mat-card>
+
+      <!-- row 1 -->
+      <h2>User Details</h2>
+
+      <div fxLayout="row" fxLayoutGap="2.65%">
+        <mat-form-field fxFlex="23%">
+          <input matInput placeholder="Full Name" formControlName="Fullname">
+          <mat-error *ngIf="_f('Fullname').invalid && _f('Fullname').touched">
+            <span *ngIf="_f('Fullname').errors?.['required']">Full name is required</span>
+            <span *ngIf="_f('Fullname').errors?.['pattern']">Invalid value</span>
+            <span *ngIf="_f('Fullname').errors?.['minlength']">Atleast 3 characters required</span>
+            <span *ngIf="_f('Fullname').errors?.['maxlength']">Cannot be more than 12 characters</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="23%">
+          <input matInput placeholder="Username" formControlName="Username">
+          <mat-error *ngIf="_f('Username').invalid && _f('Username').touched">
+            <span *ngIf="_f('Username').errors?.['required']">Username is required</span>
+            <span *ngIf="_f('Username').errors?.['pattern']">Invalid value</span>
+            <span *ngIf="_f('Username').errors?.['minlength']">Atleast 3 characters required</span>
+            <span *ngIf="_f('Username').errors?.['maxlength']">Cannot be more than 12 characters</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="23%">
+          <input matInput type="password" placeholder="Password" formControlName="UserPassword">
+          <mat-error *ngIf="_f('UserPassword').invalid && _f('UserPassword').touched">
+            <span *ngIf="_f('UserPassword').errors?.['required']">Password is required</span>
+            <span *ngIf="_f('UserPassword').errors?.['pattern']">Invalid value</span>
+            <span *ngIf="_f('UserPassword').errors?.['minlength']">Password must be atleast 6 characters</span>
+            <span *ngIf="_f('UserPassword').errors?.['maxlength']">Password must be below 20 characters</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="23%">
+          <input matInput type="password" placeholder="Confirm Password" formControlName="CPassword">
+          <mat-error *ngIf="_f('CPassword').invalid && _f('CPassword').touched">
+            <span *ngIf="_f('CPassword').errors?.['required']">Confirm Password is required</span>
+            <span *ngIf="_f('CPassword').errors?.['mismatch']">Password &amp; Confirm Password must be same</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- 2nd Row -->
+      <div fxLayout="row" fxLayoutGap="2.65%">
+        <mat-form-field fxFlex="23%">
+          <mat-select placeholder="User Type" formControlName="UserRole">
+            <mat-option *ngFor="let role of userRoles" [value]="role.value">
+              {{ role.text }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="_f('UserRole').invalid && _f('UserRole').touched">
+            <span *ngIf="_f('UserRole').errors?.['required']">User type is required</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+    </mat-card>
+
+    <button type="submit" mat-raised-button class="saveBtn" color="accent">Save</button>
+
+  </form>
+</div>

@@ -1,0 +1,42 @@
+<div class="animated bounceInUp">
+  <mat-card>
+    
+    <app-page-title [title]="'Consignment Logs'"></app-page-title>
+    
+    <div class="topContainer" fxLayout.gt-xs="row" fxLayout.xs="column">
+      <mat-form-field fxFlex="25%" fxFlex.sm="50%" fxFlex.xs="100%">
+        <input autocomplete="off" (keyup.enter)="searchConsignmentLogs()" matInput type="text" placeholder="Search by LR Number" [formControl]="searchText">
+        <button mat-button *ngIf="searched" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+          <mat-icon class="clearIcon">close</mat-icon>
+        </button>
+        <button mat-button matSuffix mat-icon-button *ngIf="!searched" aria-label="Search" (click)="searchConsignmentLogs()">
+          <mat-icon class="searchIcon">search</mat-icon>
+        </button>
+      </mat-form-field>
+      <div fxFlex="auto"></div>
+    </div>
+
+    <table *ngIf="consignmentLogs.length > 0;else noConsignmentLogs" class="table table-hovered">
+      <tr>
+        <th>#</th>
+        <th>Log Date</th>
+        <th>LR #</th>
+        <th>User</th>
+        <th>Message</th>
+      </tr>
+      <tr *ngFor="let item of consignmentLogs; index as i">
+        <td>{{ (pageStats.pageIndex * pageStats.pageSize) + (i + 1) }}</td>
+        <td>{{ item.LogDate | date: 'dd/MM/yyyy hh:mm a' }}</td>
+        <td>{{ paddedLRNumber(item.LRNumber) }}</td>
+        <td>{{ item.User }}</td>
+        <td>Consignment {{ item.Message }}</td>
+      </tr>
+    </table>
+    <mat-paginator #paginator [length]="pageStats.totalItems" [pageIndex]="pageStats.pageIndex" [pageSize]="pageStats.pageSize" (page)="getNextPage($event)"></mat-paginator>
+
+  <ng-template #noConsignmentLogs>
+    <div class="alert alert-danger">No Consignment Logs found</div>
+  </ng-template>
+    
+  </mat-card>
+</div>

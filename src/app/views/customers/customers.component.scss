@@ -1,0 +1,34 @@
+@import "../../../scss/media-queries.scss";
+
+.topContainer {
+  margin: 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.searchIcon {
+  font-size: 1.35rem !important;
+  color: green;
+}
+
+.clearIcon {
+  font-size: 1.35rem !important;
+  color: red;
+}
+
+@include respond-below(md) {
+  td::before {
+    font-weight: bold;
+    text-align: left;
+    margin-right: 15px;
+  }
+
+  td:nth-of-type(1):before { content: "#"; }
+	td:nth-of-type(2):before { content: "Name:"; }
+	td:nth-of-type(3):before { content: "Address:"; }
+	td:nth-of-type(4):before { content: "Address1:"; }
+	td:nth-of-type(5):before { content: "City:"; }
+	td:nth-of-type(6):before { content: "State:"; }
+	td:nth-of-type(7):before { content: "Pincode:"; }
+	td:nth-of-type(8):before { content: "Mobile:"; }
+}

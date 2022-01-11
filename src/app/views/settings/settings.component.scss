@@ -1,0 +1,21 @@
+@import '../../../scss/variables.scss';
+
+mat-card {
+  margin-bottom: 20px;
+}
+
+mat-option:hover {
+  background: $primary !important;
+  color: #fff;
+}
+
+mat-option.mat-active {
+  background: $primary !important;
+  color: #fff;
+}
+
+.saveBtn {
+  min-width: 200px;
+  min-height: 50px;
+  text-align: center;
+}

@@ -1,0 +1,30 @@
+@import '../../../scss/variables.scss';
+
+mat-card {
+  margin-bottom: 20px;
+}
+
+mat-option:hover {
+  background: $primary !important;
+  color: #fff;
+}
+
+mat-error span {
+  display: block;
+  margin-bottom: 3px;
+}
+
+mat-option.mat-active {
+  background: $primary !important;
+  color: #fff;
+}
+
+mat-option.mat-selected:not(.mat-option-disabled) {
+  color: #fff !important;
+}
+
+.saveBtn {
+  min-width: 200px;
+  min-height: 50px;
+  text-align: center;
+}
