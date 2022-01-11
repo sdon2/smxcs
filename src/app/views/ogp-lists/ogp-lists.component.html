@@ -58,7 +58,7 @@
                 <mat-icon aria-label="Print" title="Print" (click)="printOGPList(item.Id)" color="accent">print</mat-icon>
               </button>
               <button *ngIf="canExport" mat-icon-button class="action-button">
-                <mat-icon aria-label="Print" title="Print" (click)="exportToExcel(item.Id)" color="primary">table_chart</mat-icon>
+                <mat-icon aria-label="Export to Excel" title="Export to Excel" (click)="exportToExcel(item.Id)" color="primary">table_chart</mat-icon>
               </button>
               <button *ngIf="canDelete" mat-icon-button class="action-button">
                 <mat-icon aria-label="Delete" title="Delete" (click)="deleteOGPList(i)" color="warn">clear</mat-icon>

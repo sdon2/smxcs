@@ -72,8 +72,15 @@ class GenerateXlsx extends BaseController
         $ogplist = $this->populateOGPList($id);
 
         $general = [
-            ['Vehicle No:', $ogplist['RegNumber'], '', 'Driver Name:', $ogplist['DriverName'], '', 'Mobile No:', $ogplist['DriverPhone']],
-            ['From:', $ogplist['FromCity'], '', 'To:', $ogplist['ToCity'], 'OGP No:', $ogplist['Id']],
+            ['OGP No: ' . $ogplist['Id']],
+            ['Vehicle No: ' . $ogplist['RegNumber'], 'Driver Name: ' . $ogplist['DriverName'], 'Mobile No: ' . $ogplist['DriverPhone']],
+            ['From: ' . $ogplist['FromCity'], 'To: ' . $ogplist['ToCity']],
+        ];
+
+        $rents = [
+            ['Rent:', number_format($ogplist['Rent'], 2)],
+            ['Advance:', number_format($ogplist['Advance'], 2)],
+            ['Balance:', number_format($ogplist['Balance'], 2)],
         ];
 
         $getPaymentMode = function ($mode) {
@@ -123,6 +130,10 @@ class GenerateXlsx extends BaseController
                 $writer->addRow($row);
             }
 
+            // empty row
+            $row = WriterEntityFactory::createRowFromArray([]);
+            $writer->addRow($row);
+
 			// write headings
 			$headings = array_keys($consignments[0]);
 			$row = WriterEntityFactory::createRowFromArray($headings);
@@ -134,6 +145,16 @@ class GenerateXlsx extends BaseController
 				$row = WriterEntityFactory::createRowFromArray($values);
 				$writer->addRow($row);
 			}
+
+            // empty row
+            $row = WriterEntityFactory::createRowFromArray([]);
+            $writer->addRow($row);
+
+            // write rents
+            foreach($rents as $r) {
+                $row = WriterEntityFactory::createRowFromArray($r);
+                $writer->addRow($row);
+            }
 
 			$writer->close();
 		}
