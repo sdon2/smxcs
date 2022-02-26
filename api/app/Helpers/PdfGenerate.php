@@ -50,4 +50,49 @@ class PdfGenerate
 
         echo $body;
     }
+
+    function generatePdfPuppeteer($html, $options, $viewport) {
+
+        $this->pdf_url = "http://127.0.0.1:8001/";
+
+        $ch = \curl_init($this->pdf_url);
+        $payload = ['html' => $html, 'options' => $options, 'viewport' => $viewport];
+
+        # Setup request to send json via POST.
+        \curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        \curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+        # Return response instead of printing.
+        \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        \curl_setopt($ch, CURLOPT_HEADER, true);
+
+        $headers = [];
+
+        # Get headers
+        \curl_setopt($ch, CURLOPT_HEADERFUNCTION, function($curl, $header) use (&$headers) {
+            $len = \strlen($header);
+            $header = \explode(':', $header, 2);
+            if (\count($header) >= 2)
+                $headers[\trim($header[0])] = \trim($header[1]);
+            return $len;
+        });
+
+        # Send request.
+        $result = \curl_exec($ch);
+
+        // Remove headers from body
+        $header_len = \curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $body = \substr($result, $header_len);
+
+        if(\curl_error($ch)) {
+            $body = 'Error:' . curl_error($ch);
+        }
+        else {
+            foreach ($headers as $h_name => $header) {
+                \header("$h_name: $header");
+            }
+        }
+        \curl_close($ch);
+
+        echo $body;
+    }
 }

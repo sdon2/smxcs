@@ -56,14 +56,15 @@ class Pdf extends BaseController
 
         ob_start();
 
-        require(API_PATH."/html/consignment.php");
+        require(API_PATH."/html/consignment-puppeteer.php");
 
         $html = ob_get_contents();
         ob_end_clean();
 
         //echo $html;
 
-        $pdf->generatePdf($html, $orientation, $psize, $width, $height);
+        //$pdf->generatePdf($html, $orientation, $psize, $width, $height);
+        $pdf->generatePdfPuppeteer($html, ['width' => '220mm', 'height' => '159mm', 'format' => null], ['width' => 832, 'height' => 601]);
     }
 
     function getOgplist($id) {
@@ -78,13 +79,14 @@ class Pdf extends BaseController
 
         ob_start();
 
-        require(API_PATH."/html/ogplist.php");
+        require(API_PATH."/html/ogplist-puppeteer.php");
 
         $html = ob_get_contents();
         ob_end_clean();
 
         //echo $html;
 
-        $pdf->generatePdf($html, $orientation, $psize);
+        //$pdf->generatePdf($html, $orientation, $psize);
+        $pdf->generatePdfPuppeteer($html, [], null);
     }
 }
